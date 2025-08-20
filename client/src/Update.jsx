@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import {toast} from "react-toastify";
 
@@ -25,11 +25,11 @@ const Update = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.put('http://localhost:8081/update/'+id, values)
+        axios.put(`http://localhost:8081/api/students/update/${id}`, values)
         .then(res => {
             toast.success("Student Updated Successfully!")
             console.log(res)
-            navigate('/')
+            navigate('/home')
         })
         .catch(err => {
             toast.error("Student not Updated!")
@@ -37,8 +37,8 @@ const Update = () => {
     }
 
     return (
-        <div className="d-flex vh-100 bg-info justify-content-center align-items-center">
-            <div className='w-50 bg-white rounded p-3'>
+        <div className="d-flex vh-100 bg-secondary-subtle justify-content-center align-items-center">
+            <div className='w-50 bg-white shadow-lg rounded p-3'>
                 <form onSubmit={handleSubmit}>
                     <h2>Update Student</h2>
                     <div className="mb-2">
@@ -61,6 +61,7 @@ const Update = () => {
                             onChange={(e) => setValues({ ...values, email: e.target.value })}
                         />
                     </div>
+                    <Link to='/home' className="btn btn-primary me-2" >Back</Link>
                     <button className="btn btn-success">Submit</button>
                 </form>
             </div>

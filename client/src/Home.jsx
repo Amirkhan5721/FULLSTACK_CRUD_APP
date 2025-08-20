@@ -10,13 +10,13 @@ const Home = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:8081/")
+        axios.get("http://localhost:8081/api/students")
             .then(result => setData(result.data))
             .catch(err => console.log(err));
     }, []);
 
     const handleDelete = (id) => {
-        axios.delete(`http://localhost:8081/delete/${id}`)
+        axios.delete(`http://localhost:8081/api/students/delete/${id}`)
             .then(res => {
                 toast.success("Student Deleted Successfully!")
                 setData(data.filter(student => student.id !== id));
@@ -28,8 +28,8 @@ const Home = () => {
     };
 
     return (
-        <div className='d-flex vh-100 bg-info justify-content-center align-items-center'>
-            <div className='w-50 bg-white rounded p-3'>
+        <div className='d-flex vh-100 bg-secondary-subtle justify-content-center align-items-center'>
+            <div className='w-50 bg-white shadow-lg rounded p-3'>
                 <h2>Student List</h2>
                 <div className='d-flex justify-content-end'>
                     <Link to="/create" className='btn btn-success' >Create +</Link>

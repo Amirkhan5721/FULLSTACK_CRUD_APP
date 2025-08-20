@@ -1,79 +1,19 @@
 const express = require('express');
-const mysql = require('mysql2');
+const db = require('./models/db');
 const cors = require('cors');
+const allRoutes = require('./routes/allRoutes');
 require ('dotenv').config();
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); //Parse JSON body
+app.use(express.urlencoded({extended: true})); // For form data
 
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT
-});
-
-db.connect((err) => {
-    if (err) {
-        console.error("Database connection failed:", err.message);
-        process.exit(1); // stop server if DB is not connected
-    }
-    console.log("Database connected successfully");
-});
-
-app.get('/', (req, res) => {
-    const sql = "SELECT * FROM student";
-    db.query(sql, (err, result) => {
-        if (err) return res.json({ message: "Error inside Server." });
-        return res.json(result);
-    });
-});
-
-app.post('/student', (req, res) => {
-    const sql = "INSERT INTO student ( `Name`,`Email` ) VALUES (?, ?)";
-    const values = [
-        req.body.name,
-        req.body.email
-    ]
-    db.query(sql, values, (err, result) => {
-        if (err) return res.json(err)
-        return res.json(result)
-    })
-});
-
-app.get('/read/:id', (req, res) => {
-    const sql = "SELECT * FROM student WHERE id = ?";
-    const id = req.params.id;
-
-    db.query(sql, [id], (err, result) => {
-        if (err) return res.json({ message: "Error inside Server." });
-        return res.json(result);
-    });
-});
+app.use('/api/students', allRoutes);
 
 
-app.put('/update/:id', (req, res) => {
-    const sql = 'UPDATE student SET `Name` = ?, `Email` = ? WHERE id = ?';
-    const id = req.params.id;
-    db.query(sql, [req.body.name, req.body.email, id], (err, result) => {
-        if (err) return res.json({ message: 'Inside server error.' });
-        return res.json(result);
-    })
-})
-
-
-app.delete('/delete/:id', (req,res) => {
-    const sql = 'DELETE FROM student WHERE id = ?';
-    const id = req.params.id;
-    db.query(sql, [id], (err, result) => {
-        if (err) return res.json({ message: 'Inside server error.' });
-        return res.json(result);
-    })
-})
 const PORT = process.env.PORT || 8081
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
-})
+});

@@ -4,6 +4,8 @@ import Home from "./Home"
 import Create from "./Create";
 import Read from "./Read";
 import Update from "./Update";
+import Register from "./components/Register";
+import Login from "./components/Login";
 import "bootstrap/dist/css/bootstrap.min.css"
 import { ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
@@ -15,7 +17,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={ <Home />} />
+        <Route path="/home" element={ <Home />} />
+        <Route path="/" element={ <Register />} />
+        <Route path="/login" element={ <Login />} />
         <Route path="/create" element={ <Create />} />
         <Route path="/read/:id" element={ <Read />} />
         <Route path="/edit/:id" element={ <Update />} />
